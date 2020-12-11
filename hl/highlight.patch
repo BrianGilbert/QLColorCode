@@ -1,0 +1,46 @@
+diff --git a/filetypes.conf b/filetypes.conf
+index 10cfd0c..a558ce2 100644
+--- a/filetypes.conf
++++ b/filetypes.conf
+@@ -45,6 +45,7 @@ FileMapping = {
+  { Lang="coldfusion", Extensions={"cfc","cfm"} },
+  { Lang="cobol", Extensions={"cob", "cbl"} },
+  { Lang="crystal", Extensions={"cr"} },
++ { Lang="css", Extensions={"css", "less", "sass", "scss"} },
+  { Lang="conf", Extensions={"anacrontab"} },
+  { Lang="delphi", Extensions={"pas", "dpr"} },
+  { Lang="diff", Extensions={"patch"} },
+@@ -73,7 +74,7 @@ FileMapping = {
+  { Lang="mod2", Extensions={"mod", "def"} },
+  { Lang="mod3", Extensions={"m3", "i3"} },
+  { Lang="oberon", Extensions={"ooc"} },
+- { Lang="php", Extensions={"php3", "php4", "php5", "php6", "php7", "phps", "phpt"} },
++ { Lang="php", Extensions={"php3", "php4", "php5", "php6", "php7", "phps", "phpt", "install", "module", "profile"} },
+  { Lang="pike", Extensions={"pmod"} },
+  { Lang="pl1", Extensions={"ff", "fp", "fpp", "rpp","sf", "sp", "spb",
+                "spp","sps", "wp", "wf", "wpp","wps","wpb","bdy","spe"} },
+
+diff --git a/src/makefile b/src/makefile
+index 9d0a08e..0a7a833 100644
+--- a/src/makefile
++++ b/src/makefile
+@@ -43,8 +43,8 @@ ifeq (${LUA_TEST},1)
+ LUA_PKG_NAME=lua
+ endif
+
+-LUA_CFLAGS=$(shell pkg-config --cflags ${LUA_PKG_NAME})
+-LUA_LIBS=$(shell pkg-config --libs ${LUA_PKG_NAME})
++LUA_CFLAGS=-I../../lua -I../..
++LUA_LIBS=../../lua/liblua.a
+
+ # luajit lib
+ # LUA_LIBS=$(shell pkg-config --libs luajit)
+@@ -75,7 +75,7 @@ LDFLAGS = -ldl
+ #LDFLAGS = ${LDFLAGS} -s
+ #LDFLAGS= -Wl,--as-needed
+
+-CXX_COMPILE=${CXX} ${CFLAGS} -c -I ${INCLUDE_DIR} ${LUA_CFLAGS}
++CXX_COMPILE=${CXX} ${CFLAGS} -c -I /opt/local/include -I /usr/local/include -I ${INCLUDE_DIR} ${LUA_CFLAGS}
+
+ # Data directories (data dir, configuration file dir)
+ CXX_DIR=-DHL_DATA_DIR=\"${HL_DATA_DIR}\" -DHL_CONFIG_DIR=\"${HL_CONFIG_DIR}\"
